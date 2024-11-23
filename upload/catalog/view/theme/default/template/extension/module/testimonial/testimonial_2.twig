@@ -1,0 +1,35 @@
+<div class="testimonials-w ">
+    <div class="slider-testimonials container">
+        <div class="inner">
+            {% if display_module_title %}<p class="modtitle">{{title}}</p> {% endif %}
+            {% if display_module_description %}<p class="description">{{description}}</p> {% endif %}
+
+            <div class="swiper contentslider services-box" 
+                data-rtl="{{ rtl }}" data-mousedrag="{{ mousedrag }}" 
+                data-touchDrag="{{ mousedrag }}" data-loop="{{ loop }}" 
+                data-autoplay="{{ autoplay }}" data-center="{{ center }}" 
+                data-autoheight="{{ autoheight }}" data-autowidth="{{ autowidth }}"
+                data-delay="{{ delay }}" data-speed="{{ speed }}" 
+                data-margin="{{ margin }}" data-items_column0="{{ setting.col_xl }}" data-items_column1="{{ setting.col_lg }}" data-items_column2="{{ setting.col_md }}" 
+                data-items_column3="{{ setting.col_sm }}" data-items_column4="{{ setting.col_xs }}" data-arrows="{{ arrows }}" data-pagination="{{ pagination }}" 
+                data-lazyload="{{ lazyload }}" data-hoverpause="{{ hoverpause }}">
+                <div class="swiper-wrapper">
+                    {% for key , testimonial in testimonials %}
+                    <div class="item item-{{ key }}">
+                        <div class="text">{{testimonial.description}}</div>
+                        <div class="name">
+                            <span>{{testimonial.title}}</span>
+                            <p>{{ testimonial.designation}}</p>
+                        </div>
+                        {% if testimonial.thumb %}
+                            <img class="testimonial-img img-circle" src="{{ testimonial.thumb }}" alt="{{testimonial.author}}" class="img-responsive" />
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+                
+        
+        </div>
+    </div>
+</div>

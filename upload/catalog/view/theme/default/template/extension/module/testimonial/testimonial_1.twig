@@ -1,0 +1,21 @@
+<div class="testimonials-w ">
+    <div class="slider-testimonials container">
+        <div class="inner">
+            <h3 class="modtitle">{{module_testimonials_heading}}</h3>
+            <div class="contentslider" data-rtl="no" data-loop="yes" data-autoplay="no" data-autoheight="no" data-autowidth="no" data-delay="4" data-speed="0.6" data-margin="0" data-items_column0="1" data-items_column1="1" data-items_column2="1" data-items_column3="1" data-items_column4="1" data-arrows="no" data-pagination="yes" data-lazyload="yes" data-hoverpause="yes">
+                {% for testimonial in testimonials %}
+                    <div class="item item-{{ module }}">
+                        <div class="text">{{testimonial.description}}</div>
+                        <div class="name">
+                            <span>{{testimonial.title}}</span>
+                            <p>{{ testimonial.designation}}</p>
+                        </div>
+                        {% if testimonial.thumb %}
+                            <img class="testimonial-img img-circle" src="{{ testimonial.thumb }}" alt="{{testimonial.author}}" class="img-responsive" />
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

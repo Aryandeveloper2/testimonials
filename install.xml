@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>Testimonials</name>
+<code>Testimonials1</code>
+<version>2.0</version>
+<author>Letscms</author>
+<link>http://www.letscms.com</link>
+<file path="system/{engine,library}/{action,loader,config,language}*.php|system/library/template/template.php">
+<operation>
+<search regex="true">
+<![CDATA[~(require|include)(_once)?\(([^)]+)~]]>
+</search>
+<add position="replace">
+<![CDATA[$1$2(modification($3)]]>
+</add>
+</operation>
+</file>
+<file path="system/library/template/twig.php">
+<operation>
+<search>
+<![CDATA[if (is_file($file)) {]]>
+</search>
+<add position="replace">
+<![CDATA[if (defined('DIR_CATALOG') && is_file(DIR_MODIFICATION . 'admin/view/template/' . $filename . '.twig')) {  
+$code = file_get_contents(DIR_MODIFICATION . 'admin/view/template/' . $filename . '.twig');
+} elseif (is_file(DIR_MODIFICATION . 'catalog/view/theme/' . $filename . '.twig')) {
+$code = file_get_contents(DIR_MODIFICATION . 'catalog/view/theme/' . $filename . '.twig');
+} elseif (is_file($file)) {]]>
+</add>
+</operation>
+</file>
+
+<file path="catalog/controller/product/product.php">
+<operation>
+<search>
+<![CDATA[if ($product_info) {]]>
+</search>
+<add position="after">
+<![CDATA[
+$data['product_testimonial'] = $this->load->controller('extension/module/testimonials/product');
+]]>
+</add>
+</operation>
+</file>
+
+
+</modification>
