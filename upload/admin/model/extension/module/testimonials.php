@@ -52,11 +52,46 @@ class ModelExtensionModuleTestimonials extends Model {
         return $testimonial_id;
     }
 
-    public function getTotalTestimonials() {
 
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "testimonials_description");
+    public function getTotalTestimonials($data = array(), $module_id) {
 
-        return $query->row['total'];
+        $where = " WHERE t.module_id = '" . (int)$module_id . "' 
+            AND td.language_id = '" . (int)$this->config->get('config_language_id') . "' ";
+        
+        $join = " LEFT JOIN " . DB_PREFIX . "testimonials_description td ON (t.testimonial_id = td.testimonial_id) ";
+    
+        // اضافه کردن شرط برای فیلتر محصول
+        if (isset($data['filter_product']) && !empty($data['filter_product'])) {
+            $join .= " JOIN " . DB_PREFIX . "product_description pd ON (
+                t.product_id = pd.product_id 
+                AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "'
+                AND pd.name LIKE '%" . $this->db->escape($data['filter_product']) . "%'
+            ) ";
+        }
+    
+        if (!empty($data['filter_title'])) {
+            $where .= " AND td.title LIKE '%" . $this->db->escape($data['filter_title']) . "%'";
+        }
+        
+        if (isset($data['filter_product_id']) && !empty($data['filter_product_id'])) {
+            $where .= " AND t.product_id = " . (int)$data['filter_product_id'];
+        }
+    
+        $sql = "SELECT * 
+            FROM " . DB_PREFIX . "testimonials t 
+            " . $join . "
+            " . $where . "
+        ";
+    
+        if (isset($data['filter_status']) && $data['filter_status'] !== '') {
+            $sql .= " AND t.status = '" . (int)$data['filter_status'] . "'";
+        }
+    
+        $sql .= " GROUP BY t.testimonial_id";
+    
+        $query = $this->db->query($sql);
+    
+        return $query->num_rows;
     }
 
     public function getTestimonials($data = array(), $module_id) {
@@ -72,6 +107,10 @@ class ModelExtensionModuleTestimonials extends Model {
                 AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "'
                 AND pd.name LIKE '%" . $this->db->escape($data['filter_product']) . "%'
             ) ";
+        }
+        
+        if (isset($data['filter_product_id']) && !empty($data['filter_product_id'])) {
+            $where .= " AND t.product_id = " . (int)$data['filter_product_id'];
         }
     
         if (!empty($data['filter_title'])) {

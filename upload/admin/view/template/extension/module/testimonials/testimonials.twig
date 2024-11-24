@@ -3,11 +3,9 @@
     <div class="page-header">
         <div class="container-fluid">
             <div class="pull-right">
-                {% if add != '' %}
-                    <a onclick="deleteItem()" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-                <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>{% endif %}
-                <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
-                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+               
+                {{ save_section.buttons }}
+            </div>
             <h1>{{ heading_title }}</h1>
             <ul class="breadcrumb">
                 {% for breadcrumb in breadcrumbs %}
@@ -31,92 +29,96 @@
             </div>
             <div class="panel-body">
                 <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
-                        <div class="col-sm-10">
-                            <select name="status" id="input-status" class="form-control">
-                                {% if status %}
-                                    <option value="1" selected="selected">{{ text_enabled }}</option>
-                                    <option value="0">{{ text_disabled }}</option>
-                                {% else %}
-                                    <option value="1">{{ text_enabled }}</option>
-                                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {{ save_section.input }}
+                    {{ main_sub_module_form }}
+
+                    <ul class="nav nav-tabs" id="moduletab">
+                            <li class="active"><a href="#testimonial" data-toggle="tab">رضایت مشتریان</a></li>
+                            <li><a href="#design" data-toggle="tab">{{ entry_design }}</a></li>
+                            <li><a href="#slider" data-toggle="tab">{{ entry_slider }}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                            <div class="tab-pane active" id="testimonial"> 
+                                {% if add != '' %}
+                                    <a onclick="deleteItem()" data-toggle="tooltip" title="{{ button_delete }}" class="pull-right btn btn-danger"><i class="fa fa-trash-o"></i></a>
+                                    <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="pull-right btn btn-primary"><i class="fa fa-plus"></i></a>
                                 {% endif %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-album-image-size">{{ entry_head }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_head }}" id="input-fontclrs" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-album-image-size">{{ entry_bgclr }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="module_testimonials_bgclr" value="{{ module_testimonials_bgclr }}" placeholder="{{ entry_bgclr }}" id="input-bgclr}}" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-album-image-size">{{ entry_author_size }}</label>
-                        <div class="col-sm-5">
-                            <input type="text" name="module_testimonials_aheight" value="{{ module_testimonials_aheight }}" placeholder="{{ entry_height }}" id="input-aheight" class="form-control" />
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="text" name="module_testimonials_awidth" value="{{ module_testimonials_awidth }}" placeholder="{{ entry_width }}" id="input-awidth" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-album-image-size">{{ entry_font_clr}}</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="module_testimonials_fontclr" value="{{ module_testimonials_fontclr }}" placeholder="{{ entry_height }}" id="input-fontclrs }}" class="form-control" />
-                        </div>
-                    </div>
-                </form>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
-                            <td class="text-left">{% if sort == 'id.title' %}
-                                    <a href="{{ sort_title }}" class="{{ order|lower }}">{{ column_title }}</a>
-                                {% else %}
-                                    <a href="{{ sort_title }}">{{ column_title }}</a>
-                                {% endif %}</td>
-                            <td class="text-right">{% if sort == 'i.sort_order' %}
-                                    <a href="{{ sort_sort_order }}" class="{{ order|lower }}">{{ column_sort_order }}</a>
-                                {% else %}
-                                    <a href="{{ sort_sort_order }}">{{ column_sort_order }}</a>
-                                {% endif %}</td>
-                            <td class="text-right">{{ column_action }}</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% if testimonials %}
-                            {% for testimonial in testimonials %}
-                                <tr>
-                                    <td class="text-center">{% if testimonial.testimonial_id in selected %}
-                                            <input type="checkbox" class="select_input" name="selected[]" value="{{ testimonial.testimonial_id }}" checked="checked" />
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                                            <td class="text-left">{% if sort == 'id.title' %}
+                                                    <a href="{{ sort_title }}" class="{{ order|lower }}">{{ column_title }}</a>
+                                                {% else %}
+                                                    <a href="{{ sort_title }}">{{ column_title }}</a>
+                                                {% endif %}</td>
+                                            <td class="text-right">{% if sort == 'i.sort_order' %}
+                                                    <a href="{{ sort_sort_order }}" class="{{ order|lower }}">{{ column_sort_order }}</a>
+                                                {% else %}
+                                                    <a href="{{ sort_sort_order }}">{{ column_sort_order }}</a>
+                                                {% endif %}</td>
+                                            <td class="text-right">{{ column_action }}</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if testimonials %}
+                                            {% for testimonial in testimonials %}
+                                                <tr>
+                                                    <td class="text-center">{% if testimonial.testimonial_id in selected %}
+                                                            <input type="checkbox" class="select_input" name="selected[]" value="{{ testimonial.testimonial_id }}" checked="checked" />
+                                                        {% else %}
+                                                            <input type="checkbox" class="select_input" name="selected[]" value="{{ testimonial.testimonial_id }}" />
+                                                        {% endif %}</td>
+                                                    <td class="text-left">{{ testimonial.title }}</td>
+                                                    <td class="text-right">{{ testimonial.sort_order }}</td>
+                                                    <td class="text-right"><a href="{{ testimonial.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                                                </tr>
+                                            {% endfor %}
                                         {% else %}
-                                            <input type="checkbox" class="select_input" name="selected[]" value="{{ testimonial.testimonial_id }}" />
-                                        {% endif %}</td>
-                                    <td class="text-left">{{ testimonial.title }}</td>
-                                    <td class="text-right">{{ testimonial.sort_order }}</td>
-                                    <td class="text-right"><a href="{{ testimonial.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
-                                </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td class="text-center" colspan="4">{{ text_no_results }}</td>
-                            </tr>
-                        {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 text-left">{{ pagination }}</div>
-                    <div class="col-sm-6 text-right">{{ results }}</div>
-                </div>
+                                            <tr>
+                                                <td class="text-center" colspan="4">{{ text_no_results }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                                    <div class="col-sm-6 text-right">{{ results }}</div>
+                                </div>
+                            </div>
+
+                            {# // -----------------------------------------------------------------------#}
+                            <div class="tab-pane" id="design"> {# design Option #}
+                                 
+                                <div class="form-group"> {# Width #}
+                                    <label class="col-sm-2 control-label" for="input-margin">{{ entry_width }}</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-sm-3">
+                                        <input type="text" name="width" value="{{ width }}" id="input-margin" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group"> {# Height #}
+                                    <label class="col-sm-2 control-label" for="input-margin">{{ entry_height }}</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-sm-3">
+                                        <input type="text" name="height" value="{{ height }}" id="input-margin" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ template_setting }}
+                            </div>
+                            {# // -----------------------------------------------------------------------#}
+                            <div class="tab-pane" id="slider"> {# slider Option #}
+                                {{ slider_setting }}
+                            </div>
+                            {# // -----------------------------------------------------------------------#}
+                        </div>
+                </form>
+                
             </div>
         </div>
     </div>

@@ -44,4 +44,42 @@ $data['product_testimonial'] = $this->load->controller('extension/module/testimo
 </file>
 
 
+
+<file path="admin/controller/catalog/product.php">
+<operation>
+<search><![CDATA[$data['text_form'] = !isset($this->request->get['product_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');]]></search>
+<add position="after"><![CDATA[
+$data['product_testimonial'] = $this->load->controller('extension/module/product_testimonial/product');
+]]></add>
+</operation>
+
+</file>
+
+<file path="admin/view/template/catalog/product_form.twig">
+<operation>
+<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+<add position="after"><![CDATA[
+<li><a href="#tab-testimonial" data-toggle="tab">{{ tab_testimonial }}</a></li>
+]]></add>
+</operation>
+<operation>
+<search ><![CDATA[<div class="tab-pane active" id="tab-general">]]></search>
+<add position="before"><![CDATA[
+<div class="tab-pane" id="tab-testimonial">
+{{ product_testimonial }}
+</div>
+]]></add>
+</operation>
+</file>
+<file path="admin/language/fa-ir/catalog/product.php">
+<operation>
+<search><![CDATA[<?php]]></search>
+<add position="after"><![CDATA[
+$_['tab_testimonial']           = 'رضایت مشتریان';
+]]></add>
+</operation>
+</file>
+
+
+
 </modification>

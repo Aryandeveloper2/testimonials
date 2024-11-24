@@ -3,19 +3,10 @@
         <div class="inner">
             {% if display_module_title %}<p class="modtitle">{{title}}</p> {% endif %}
             {% if display_module_description %}<p class="description">{{description}}</p> {% endif %}
-
-            <div class="swiper contentslider services-box" 
-                data-rtl="{{ rtl }}" data-mousedrag="{{ mousedrag }}" 
-                data-touchDrag="{{ mousedrag }}" data-loop="{{ loop }}" 
-                data-autoplay="{{ autoplay }}" data-center="{{ center }}" 
-                data-autoheight="{{ autoheight }}" data-autowidth="{{ autowidth }}"
-                data-delay="{{ delay }}" data-speed="{{ speed }}" 
-                data-margin="{{ margin }}" data-items_column0="{{ setting.col_xl }}" data-items_column1="{{ setting.col_lg }}" data-items_column2="{{ setting.col_md }}" 
-                data-items_column3="{{ setting.col_sm }}" data-items_column4="{{ setting.col_xs }}" data-arrows="{{ arrows }}" data-pagination="{{ pagination }}" 
-                data-lazyload="{{ lazyload }}" data-hoverpause="{{ hoverpause }}">
-                <div class="swiper-wrapper">
-                    {% for key , testimonial in testimonials %}
-                    <div class="item item-{{ key }}">
+            
+            <div class="contentslider" data-rtl="no" data-loop="yes" data-autoplay="no" data-autoheight="no" data-autowidth="no" data-delay="4" data-speed="0.6" data-margin="0" data-items_column0="1" data-items_column1="1" data-items_column2="1" data-items_column3="1" data-items_column4="1" data-arrows="no" data-pagination="yes" data-lazyload="yes" data-hoverpause="yes">
+                {% for testimonial in testimonials %}
+                    <div class="item item-{{ module }}">
                         <div class="text">{{testimonial.description}}</div>
                         <div class="name">
                             <span>{{testimonial.title}}</span>
@@ -26,10 +17,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                </div>
             </div>
-                
-        
         </div>
     </div>
 </div>

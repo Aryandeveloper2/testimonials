@@ -132,7 +132,7 @@ class ControllerExtensionModuleProductTestimonial extends Controller {
             'limit' => $this->config->get('config_limit_admin')
         );
 
-        $testimonials_total = $this->model_extension_module_testimonials->getTotalTestimonials($filter_data);
+        $testimonials_total = $this->model_extension_module_testimonials->getTotalTestimonials($filter_data,0);
     
         $results = $this->model_extension_module_testimonials->getTestimonials($filter_data , 0);
 
@@ -390,6 +390,11 @@ class ControllerExtensionModuleProductTestimonial extends Controller {
         } else {
             $data['product_id'] = '';
         }
+        
+        if(isset($this->request->get['product_id']) && $data['product_id'] == '') {
+           $data['product_id'] = $this->request->get['product_id'];
+        }
+        
         if ($data['product_id'] != '') {
             $data['product'] = $this->model_catalog_product->getProductDescriptions($data['product_id']);
             
@@ -413,7 +418,59 @@ class ControllerExtensionModuleProductTestimonial extends Controller {
 
         $this->response->setOutput($this->load->view('extension/module/testimonials/product_testimonial_form', $data));
     }
+    
+    
+    public function product() {
+        // load
+        $this->load->model('extension/module/testimonials');
+        $this->load->model('setting/module');
+        $this->load->model('tool/image');
+        $this->load->model('catalog/product');
+        $url = "";
+        if(!isset($this->request->get['product_id'])) {
+            return false;
+        } else {
+            $product_id = $this->request->get['product_id'];
+            $url .= "&product_id=$product_id";
+        }
+        
+    
+        
+        $data['add'] = $this->url->link('extension/module/product_testimonial/form', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
+        $data['user_token'] = $this->session->data['user_token'];
+        
+        $filter_product_id = $this->request->get['product_id'];
+
+        $data['testimonials'] = array();
+
+        $filter_data = array(
+            'module_id'             => 0,
+            'filter_product_id'     => $filter_product_id,
+            'start'                 => 0,
+            'limit'                 => 500
+        );
+
+        $testimonials_total = $this->model_extension_module_testimonials->getTotalTestimonials($filter_data, 0);
+    
+        $results = $this->model_extension_module_testimonials->getTestimonials($filter_data , 0);
+
+        foreach ($results as $result) {
+            $data['testimonials'][] = array(
+                'testimonial_id' => $result['testimonial_id'],
+                'title' => $result['title'],
+                'sort_order' => $result['sort_order'],
+                'edit' => $this->url->link('extension/module/product_testimonial/form', 'user_token=' . $this->session->data['user_token'] . '&testimonial_id=' . $result['testimonial_id']  . $url, true)
+            );
+        }
+
+
+        $data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+
+        return $this->load->view('extension/module/testimonials/product_testimonial', $data);
+    }
+    
+    
     protected function validateForm() {
         if (!$this->user->hasPermission('modify', 'extension/module/testimonials')) {
             $this->error['warning'] = $this->language->get('error_permission');
@@ -435,8 +492,6 @@ class ControllerExtensionModuleProductTestimonial extends Controller {
 
         return !$this->error;
     }
-
-
 
     public function setting() {
         $this->load->language('extension/module/product_testimonial');
